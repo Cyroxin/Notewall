@@ -1,0 +1,22 @@
+{
+  "name": "notewall",
+  "version": "1.0.0",
+  "description": "Site for conveying messages",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cyroxin/Notewall.git"
+  },
+  "author": "Cyroxin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cyroxin/Notewall/issues"
+  },
+  "homepage": "https://github.com/Cyroxin/Notewall#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
