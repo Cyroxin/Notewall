@@ -15,6 +15,11 @@ const port = 3000;
 /* ROUTE */
 //app.use('/nameOfRouteFolder', route);
 
+// TODO: Implement routing in separate file
+app.get('/test', function (req, res) {
+    res.send('hello world')
+  })
+
 /* RUN */ 
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));
