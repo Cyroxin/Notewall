@@ -1,19 +1,24 @@
-'use strict'
+'use strict';
 
-const http = require('http');
-const https = require('https');
-const fs = require('fs');
 
-const sslkey = fs.readFileSync('ssl-key.pem');
-const sslcert = fs.readFileSync('ssl-cert.pem');
-const options = { key: sslkey, cert: sslcert };
+module.exports = (app, port) => {
+    /*
+    require('dotenv').config();
+    
+    app.enable('trust proxy');
+    
+    app.use ( (req, res, next) => {
+        if (req.secure) {
+            // request was via https, so do no special handling
+            next();
+        } else {
+            console.log("Redirecting to https");
+            const proxypath = process.env.PROXY_PASS || ''
+            // request was via http, so redirect to https
+            res.redirect(301, `https://${req.headers.host}${proxypath}${req.url}`);
+        }
+    });
+    */
 
-const httpsRedirect = (req,res)  => {
-    res.writeHead(301, { 'Location': 'https://localhost:8000' + req.url });
-      res.end();
-    };
-
-module.exports = (app, httpsPort, httpPort) => {
-    https.createServer(options, app).listen(httpsPort);
-    http.createServer(httpsRedirect).listen(httpPort);
+    app.listen(port, () => console.log("App listening on port ", port));
 };

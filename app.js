@@ -37,10 +37,10 @@ console.log("Production: ", production);
 
 if (production === "true") {
   console.log("production");
-  require('./production')(app, 8000, 3000);
+  require('./production')(app, 3000);
 } else {
   console.log("development");
-  require('./localhost')(app, 3000);
+  require('./localhost')(app, 8000, 3000);
 }
 
 //module.export = production; // Is running on server? "true"/"false"
