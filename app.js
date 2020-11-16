@@ -15,7 +15,6 @@ const app = express();
 
 
 /* CONFIGURE */
-app.use(express.static('uploads'));
 
 
 /* ROUTE */
@@ -33,6 +32,10 @@ if (production === "true") {
   console.log("development");
   require('./localhost')(app, 8000, 3000);
 }
+
+
+app.use(express.static('uploads'));
+
 
 app.get('/', (req, res) => // Example
 {
