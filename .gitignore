@@ -115,9 +115,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# cert
+*.csr
+*.pem
+
 # File uploads
 uploads/
-
-# Certs
-.pem
-.csr
