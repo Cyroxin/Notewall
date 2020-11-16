@@ -6,6 +6,8 @@ module.exports = (app, port) => {
     require('dotenv').config();
     
     app.enable('trust proxy');
+
+    console.log("Inserting https middleware");
     
     app.use ( (req, res, next) => {
         if (req.secure) {
