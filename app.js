@@ -1,21 +1,19 @@
 'use strict';
 
-/* REQUIRE */ 
+require('dotenv').config();
+const production = process.env.production || 'false'; // Is running on server? "true"/"false"
+
+/* REQUIRE */
+//const express = require('express');
 const express = require('express');
-const https = require('https'); // DO NOT REMOVE
-const fs = require('fs');
 
-// const route = require('./routes/nameRoute');
+// const route = require('./routes/nameRoute'); // Example route
 
-/* INIT */ 
+/* INIT */
+
 const app = express();
 
-const sslkey = fs.readFileSync('ssl-key.pem'); // DO NOT REMOVE
-const sslcert = fs.readFileSync('ssl-cert.pem'); // DO NOT REMOVE
-
-https.createServer({ key: sslkey, cert: sslcert }, app).listen(8000); // DO NOT REMOVE
-
-app.get('/', (req, res) =>  // TODO: IMPLEMENT ROUTING, ALWAYS HAVE A ROOT!
+app.get('/', (req, res) => // Example
 {
   res.send('Hello Secure World!');
 });
@@ -29,18 +27,21 @@ app.use(express.static('uploads'));
 
 // TODO: Implement routing in separate file
 app.get('/test', function (req, res) {
-    res.send('hello world')
-  })
+  res.send('hello world')
+})
 
-/* RUN */ 
 
-require('http').createServer((req, res) => // DO NOT REMOVE, REDIRECTS HTTP TRAFFIC 
-{
-  res.writeHead(301, { 'Location': 'https://localhost:8000' + req.url });
-  res.end();
-}).listen(3000);
+/* RUN */
 
-module.exports = (app, httpsPort, httpPort) => {
-  https.createServer(options, app).listen(httpsPort);
-  http.createServer(httpsRedirect).listen(httpPort);
- };
+console.log("Production: ", production);
+
+if (production == "false") {
+  app.listen(3000);
+}
+else {
+  // For https
+  app.enable('trust proxy');
+  require('./server')(app, 8000,3000);
+}
+
+module.export = production; // Is running on server? "true"/"false"
