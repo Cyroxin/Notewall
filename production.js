@@ -2,7 +2,7 @@
 
 
 module.exports = (app, port) => {
-    /*
+    
     require('dotenv').config();
     
     app.enable('trust proxy');
@@ -18,7 +18,7 @@ module.exports = (app, port) => {
             res.redirect(301, `https://${req.headers.host}${proxypath}${req.url}`);
         }
     });
-    */
+    
 
     app.listen(port, () => console.log("App listening on port ", port));
 };
