@@ -13,10 +13,6 @@ const express = require('express');
 
 const app = express();
 
-app.get('/', (req, res) => // Example
-{
-  res.send('Hello Secure World!');
-});
 
 /* CONFIGURE */
 app.use(express.static('uploads'));
@@ -26,14 +22,9 @@ app.use(express.static('uploads'));
 //app.use('/nameOfRouteFolder', route); // EXAMPLE
 
 // TODO: Implement routing in separate file
-app.get('/test', function (req, res) {
-  res.send('hello world')
-})
 
 
 /* RUN */
-
-console.log("Production: ", production);
 
 if (production === "true") {
   console.log("production");
@@ -42,5 +33,15 @@ if (production === "true") {
   console.log("development");
   require('./localhost')(app, 8000, 3000);
 }
+
+app.get('/', (req, res) => // Example
+{
+  res.send('Hello Secure World!');
+});
+
+
+app.get('/test', function (req, res) {
+  res.send('hello world')
+})
 
 //module.export = production; // Is running on server? "true"/"false"
