@@ -10,10 +10,13 @@ const sslcert = fs.readFileSync('ssl-cert.pem');
 const options = { key: sslkey, cert: sslcert };
 
 module.exports = (app, httpsPort, httpPort) => {
+    app.enable('trust proxy');
 
     https.createServer(options, app).listen(httpsPort);
     http.createServer((req, res) => {
-        res.writeHead(301, { 'Location': 'https://localhost:' + httpsPort + req.url });
+        const proxypath = process.env.PROXY_PASS || ''
+        console.log(req.headers.host);
+        res.writeHead(301, { 'Location': `https://${req.headers.host}${proxypath}${req.url}` });
         res.end();
     }).listen(httpPort);
 };

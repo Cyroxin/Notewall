@@ -37,11 +37,8 @@ console.log("Production: ", production);
 
 if (production == "false") {
   app.listen(3000);
-}
-else {
-  // For https
-  app.enable('trust proxy');
-  require('./server')(app, 8000,3000);
+} else {
+  require('./server')(app, 8000, 3000);
 }
 
 module.export = production; // Is running on server? "true"/"false"
