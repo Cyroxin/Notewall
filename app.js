@@ -37,7 +37,7 @@ console.log("Production: ", production);
 
 if (production === "true") {
   console.log("production");
-  require('./production')(app);
+  require('./production')(app, 3000);
 } else {
   console.log("development");
   require('./localhost')(app, 8000, 3000);

@@ -3,7 +3,7 @@
 require('dotenv').config();
 
 
-module.exports = (app) => {
+module.exports = (app, port) => {
     app.enable('trust proxy');
     
     app.use ( (req, res, next) => {
@@ -18,5 +18,5 @@ module.exports = (app) => {
         }
     });
 
-    app.listen(3000);
+    app.listen(port, () => console.log("App listening on port ", port));
 };
