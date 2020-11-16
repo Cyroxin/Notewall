@@ -117,3 +117,7 @@ dist
 
 # File uploads
 uploads/
+
+# Certs
+.pem
+.csr
