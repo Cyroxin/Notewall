@@ -1,9 +1,8 @@
 'use strict';
 
+require('dotenv').config();
 
 module.exports = (app, port) => {
-    
-    require('dotenv').config();
     
     app.enable('trust proxy');
 
@@ -14,8 +13,8 @@ module.exports = (app, port) => {
             // request was via https, so do no special handling
             next();
         } else {
-            console.log("Redirecting to https");
             const proxypath = process.env.PROXY_PASS || ''
+            console.log(`Redirecting to https (https://${req.headers.host}${proxypath}${req.url}`);
             // request was via http, so redirect to https
             res.redirect(301, `https://${req.headers.host}${proxypath}${req.url}`);
         }
