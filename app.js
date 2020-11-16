@@ -35,10 +35,12 @@ app.get('/test', function (req, res) {
 
 console.log("Production: ", production);
 
-if (production == "false") {
-  app.listen(3000);
+if (production === "true") {
+  console.log("production");
+  require('./production')(app);
 } else {
-  require('./server')(app, 8000, 3000);
+  console.log("development");
+  require('./localhost')(app, 8000, 3000);
 }
 
 module.export = production; // Is running on server? "true"/"false"
