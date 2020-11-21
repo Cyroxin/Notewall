@@ -1,2 +1,2 @@
 # Notewall
-Site for posting messages
+Site for posting public messages 
