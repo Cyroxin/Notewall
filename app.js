@@ -22,9 +22,7 @@ console.log("production: ", production);
 const express = require('express');
 const app = express();
 
-//const cats = require('./routes/postRoute');
-//const users = require('./routes/userRoute');
-//const auth = require('./routes/authRoute');
+const posts = require('./require/routes/postRoute');
 
 //var passport = require('./utils/pass');
 
@@ -38,7 +36,7 @@ if (!production) {
 app.use(express.json());
 //app.use(passport.initialize());
 
-app.use(express.static('uploads'));
+app.use('/uploads',express.static('uploads'));
 app.use(express.static('public_html'));
 app.use('/thumbnails', express.static('thumbnails'));
 
@@ -48,9 +46,7 @@ app.use('/thumbnails', express.static('thumbnails'));
 
 /* ROUTE */
 
-//app.use('/cat', passport.authenticate('jwt', { session: false }), cats);
-//app.use('/user', passport.authenticate('jwt', { session: false }), users);
-//app.use('/auth', auth);
+app.use('/posts'/*, passport.authenticate('jwt', { session: false })*/, posts);
 
 app.get('/test', (req, res) => // Example
 {
