@@ -1,0 +1,75 @@
+Request instructions
+
+All api requests currently go through http, not https. This could be changed, but might not be necessary.
+
+Most optional query attributes are null by default, but the request does not accept null to be passed to it in json, you should instead just not mention it in the request.
+
+All file uploads are in ip:3000/uploads/[filename] and thumbnails/[filename], check utils/resize if you wish to change thumbnail size. 
+
+Here are some example requests:
+
+// Gets post by filter and/or query, all lines are optional.
+https://localhost:8000/posts
+get
+{
+    "postId": null,
+    "responseTo": null,
+    "poster": "User",
+    "media": null,
+    "post": "%WriteSearchHere%",
+    "skip": 0,
+    "take": 10
+}
+
+// Good for infinite lists when loading requests on scroll down.
+https://localhost:8000/posts
+get
+{
+    "skip": [loadedItemCount],
+    "take": 10
+}
+
+// For a specific user's posts. You can really mitchmatch these all you like.
+https://localhost:8000/posts
+get
+{
+    "poster": "User"
+}
+
+// Gets post by id
+https://localhost:8000/posts/:postId
+get
+
+// Adds post
+// You can also upload a file using body form-data in postman, html form or javascript, so that media wont always be null. The filetype must be set as file, thus just writing a raw json body wont do.
+// The following is an example for post without media.
+
+https://localhost:8000/posts
+post
+{
+    "responseTo": 3,
+    "poster": "Foo",
+    "post": "Jeesh, tough crowd."
+}
+
+// Updates post
+// All optional except postId
+
+https://localhost:8000/posts
+put
+{
+    "postId": 6,
+    "post": "Jeesh, tough crowd!",
+    "poster": "Foo",
+    "media": "4e355852ce69f9bad586870e3178898a"
+}
+
+// Deletes post
+
+https://localhost:8000/posts
+delete
+{ "postId": 5 }
+
+// Deletes post
+https://localhost:8000/posts/:postId
+delete

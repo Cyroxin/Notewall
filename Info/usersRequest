@@ -1,0 +1,50 @@
+Request instructions
+
+All API requests should now be made HTTPS or else THEY WILL NOT WORK!
+https://localhost:8000/posts/ Works
+http://localhost:3000/posts/ Does not work
+
+Here are some example requests:
+
+// Gets user by filter and/or query, all lines are optional.
+https://localhost:8000/users
+get
+{
+    "name": "John",
+    "pass": "baa", 
+    "email": "john@mymail.com"
+}
+
+// Gets user by name
+https://localhost:8000/users/:name
+get
+
+// Adds user
+https://localhost:8000/users
+post
+{
+    "name" : "User20",
+    "email" : "modified@email.com",
+    "pass" : "12345"
+}
+
+// Updates user
+// All optional except name
+put
+{
+    "name" : "User",
+    "email" : "modified@email.com",
+    "pass" : "1234"
+}
+
+// Deletes post
+https://localhost:8000/posts
+delete
+{
+    "name" : "Mcgee"
+}
+
+// Deletes post
+https://localhost:8000/posts/:name
+delete
+

@@ -3,7 +3,7 @@ const pool = require('../utils/db');
 const promisePool = pool.promise();
 
 /*
-  getPost: Gets a list of posts that match the given parameters. Null means no filtering, no mandatory params.
+  getPosts: Gets a list of posts that match the given parameters. Null means no filtering, no mandatory params.
   
   Params:
     * postId = Id/index of the post. Begins from 1 up until unsigned int max

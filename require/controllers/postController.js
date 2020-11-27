@@ -6,6 +6,7 @@ const resize = require('../utils/resize');
 
 const posts_get = async (req, res) => {
     console.log(req.body);
+    console.log(req.body.postId);
 
     if (req.params.postId != null) {
         res.json(await postModel.getPosts(req.params.postId));
@@ -57,9 +58,9 @@ const post_delete = async (req, res) => {
     }
     else {
         if (req.params.postId != null) // Passed in path
-            postModel.deletePost(req.params.postId);
+            await postModel.deletePost(req.params.postId);
         else // Passed in body
-            postModel.deletePost(req.body.postId);
+            await postModel.deletePost(req.body.postId);
 
         res.status("204").end();
     }

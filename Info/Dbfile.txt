@@ -1,0 +1,33 @@
+CREATE TABLE users
+( 
+  name varchar(31) NOT NULL PRIMARY KEY,
+  pass varchar(63) NOT NULL,
+  email varchar(63) NOT NULL
+);
+
+INSERT INTO users (name,pass,email) 
+VALUES
+("Foo","$2a$10$flNkuiFPvkmryeqCbB7sIetv0N/xUMuFea6npQTTm5CdXur3ehrYy","foo@bar.com"),
+("John","$2a$10$1XYRZxfoUgY7Ove9ajXt6OLSPLALW7Tfvg4Cdo2prY9ZW1zryYty.","johns@mail.com") /* pass: Johnspass */,
+("User","$2a$10$49v5AxIqp3flVzk0fbsZnO9d9rQ4/0seg/hqZPqW/pbrnXwzeEOLS","modified@email.com"); /* pass: 12345 */
+
+CREATE TABLE posts
+( 
+  postId INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  responseTo INTEGER DEFAULT NULL REFERENCES posts(postID),
+  poster varchar(31) NOT NULL REFERENCES users(name),
+  media VARCHAR(63) DEFAULT NULL,
+  post text NOT NULL
+);
+
+INSERT INTO posts (poster,post) 
+VALUES
+("Foo","Food's life story: ... Foo was going to the store and got food, the end. "),
+
+("John","Shopping list: 
+ * Tomato
+ * Cheese
+ * Flour");
+ 
+ INSERT INTO posts (poster,post,responseTo) VALUES
+ ("User","What a bad story.", 1);
