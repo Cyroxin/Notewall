@@ -7,7 +7,7 @@ CREATE TABLE users
 
 INSERT INTO users (name,pass,email) 
 VALUES
-("Foo","$2a$10$flNkuiFPvkmryeqCbB7sIetv0N/xUMuFea6npQTTm5CdXur3ehrYy","foo@bar.com"),
+("Foo","$2a$10$flNkuiFPvkmryeqCbB7sIetv0N/xUMuFea6npQTTm5CdXur3ehrYy","foo@bar.com") /* pass: Bar */,
 ("John","$2a$10$1XYRZxfoUgY7Ove9ajXt6OLSPLALW7Tfvg4Cdo2prY9ZW1zryYty.","johns@mail.com") /* pass: Johnspass */,
 ("User","$2a$10$49v5AxIqp3flVzk0fbsZnO9d9rQ4/0seg/hqZPqW/pbrnXwzeEOLS","modified@email.com"); /* pass: 12345 */
 
