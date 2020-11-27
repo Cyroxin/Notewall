@@ -63,6 +63,15 @@ if (production) {
   require('./require/servers/localhost')(app, 8000, port);
 }
 
+/* ROUTE */
+
+app.use('/posts'/*, passport.authenticate('jwt', { session: false })*/, posts);
+app.use('/users'/*, passport.authenticate('jwt', { session: false })*/, users);
+
+app.get('/test', (req, res) => // Example
+{
+  res.send('Hello Secure World!');
+});
 
 module.export = production; // Is running on server? "true"/"false"
 
