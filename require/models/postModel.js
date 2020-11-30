@@ -83,19 +83,19 @@ const updatePost = async (postId, post = null, responseTo = null, poster = null,
     var params = [];
 
 
-    if (responseTo != null && responseTo !== "null") {
+    if (responseTo != null && responseTo != "null") {
       query = query.concat("responseTo = ?, ");
       params.push(responseTo);
     }
-    if (poster != null && poster !== "null") {
+    if (poster != null && poster != "null") {
       query = query.concat("poster = ?, ");
       params.push(poster);
     }
-    if (media != null && media !== "null") {
+    if (media != null && media != "null") {
       query = query.concat("media = ?, ");
       params.push(media);
     }
-    if (post != null && post !== "null") {
+    if (post != null && post != "null") {
       query = query.concat("post = ?, ");
       params.push(post);
     }
@@ -108,6 +108,9 @@ const updatePost = async (postId, post = null, responseTo = null, poster = null,
 
     query = query.concat(" WHERE postId = ?");
     params.push(postId);
+
+    console.log(query);
+    console.log(params);
 
 
     const [rows] = await promisePool.query(query, params);

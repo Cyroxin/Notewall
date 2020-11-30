@@ -24,10 +24,13 @@ async function getPosts(postId = null, post = null, responseTo = null, poster = 
         const result = await response.json();
 
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
+        }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
         }
 
         return result;
@@ -60,10 +63,13 @@ async function deletePost(postId = null) {
         const result = await response.json();
 
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
+        }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
         }
 
         return result;
@@ -71,6 +77,16 @@ async function deletePost(postId = null) {
     catch (e) {
         console.log(e.message);
     }
+}
+
+// Updates a post with media and sends a file request gui to the user.
+// await createPostWithMedia("posterUsername","postContent","responseToPostId")
+async function updatePostWithMedia(postId, post = null, responseTo = null, poster = null) {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.id = 'media';
+    input.click();
+    input.addEventListener('change', () => updatePost(postId,post,responseTo,poster, input.files[0]), false);
 }
 
 // await updatePost(14,"postContent","responseToPostId","posterUsername","Media")
@@ -83,18 +99,16 @@ async function updatePost(postId, post = null, responseTo = null, poster = null,
             return;
         }
 
-        var requestBody = {
-            "postId": postId,
-            "post": post,
-            "responseTo": responseTo,
-            "poster": poster,
-            "media": media
-        };
+        const requestBody = new FormData();
+        requestBody.append("postId",postId);
+        requestBody.append("post",post);
+        requestBody.append("responseTo",responseTo);
+        requestBody.append("poster",poster);
+        requestBody.append("media",media);
 
         const options = {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + sessionStorage.getItem('token')
             },
             body: JSON.stringify(requestBody)
@@ -103,12 +117,18 @@ async function updatePost(postId, post = null, responseTo = null, poster = null,
         const response = await fetch(url + `/posts`, options);
         const result = await response.json();
 
+        console.log(result);
         // Error
-        if (result.user != null && !result.user)
-        {
-            alert(result.message);
+        if (result.user != null && !result.user) {
+            alert(JSON.stringify(result.message));
             return;
         }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
+        }
+
+        console.log(result);
 
         return result;
     }
@@ -117,7 +137,21 @@ async function updatePost(postId, post = null, responseTo = null, poster = null,
     }
 }
 
-// await createPost("posterUsername","postContent","responseToPostId","Media")
+
+// Creates a new post and sends a file request gui to the user.
+// await createPostWithMedia("posterUsername","postContent","responseToPostId")
+async function createPostWithMedia(poster, post, responseTo = null) {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.id = 'media';
+    input.click();
+    input.addEventListener('change', () => createPost(poster,post,responseTo,input.files[0]), false);
+}
+
+
+// Creates a new post, does not upload media, do not use the media parameter.
+// await createPost("posterUsername","postContent","responseToPostId")
+// await createPost("posterUsername","postContent","responseToPostId",selectMedia)
 async function createPost(poster, post, responseTo = null, media = null) {
 
     try {
@@ -127,17 +161,15 @@ async function createPost(poster, post, responseTo = null, media = null) {
             return;
         }
 
-        var requestBody = {
-            "poster": poster,
-            "post": post,
-            "responseTo": responseTo,
-            "media": media
-        };
+        const requestBody = new FormData();
+        requestBody.append("poster",poster);
+        requestBody.append("post",post);
+        requestBody.append("responseTo",responseTo);
+        requestBody.append("media",media);
 
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + sessionStorage.getItem('token')
             },
             body: JSON.stringify(requestBody)
@@ -147,10 +179,13 @@ async function createPost(poster, post, responseTo = null, media = null) {
         const result = await response.json();
 
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
+        }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
         }
 
         return result;
@@ -190,12 +225,15 @@ async function login(name, pass) {
 
         // save token
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
         }
-            
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
+        }
+
         sessionStorage.setItem('token', result.token);
 
         return result;
@@ -266,10 +304,13 @@ async function register(name, pass, email) {
         const result = await response.json();
 
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
+        }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
         }
 
         sessionStorage.setItem('token', result.token);
@@ -317,10 +358,13 @@ async function getUsers(name = null, email = null) {
         const result = await response.json();
 
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
+        }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
         }
 
         return result;
@@ -359,10 +403,13 @@ async function updateUser(name, pass = null, email = null) {
         const result = await response.json();
 
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
+        }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
         }
 
         return result;
@@ -399,10 +446,13 @@ async function deleteUser(name) {
         const result = await response.json();
 
         // Error
-        if (result.user != null && !result.user)
-        {
+        if (result.user != null && !result.user) {
             alert(result.message);
             return;
+        }
+        else if(result.errors != null)
+        {
+            console.log(result.errors);
         }
 
         return result;

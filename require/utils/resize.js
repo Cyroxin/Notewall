@@ -5,7 +5,7 @@ const sharp = require('sharp');
 const makeThumbnail = async (file, thumbname) => 
 { 
   await sharp(file)
-  .resize(120, 120)
+  .resize(400, 400)
   .toFile(`thumbnails/${thumbname}`);
 };
 

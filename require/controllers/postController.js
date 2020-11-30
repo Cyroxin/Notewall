@@ -48,7 +48,7 @@ const post_update = async (req, res) => {
     if (!errors.isEmpty()) {
         console.log("Refused");
         console.log(errors);
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ message: errors.array() });
     }
     else {
 
@@ -65,15 +65,29 @@ const post_update = async (req, res) => {
                 user: false
             });
 
-        const result = await postModel.updatePost(
-            req.body.postId,
-            req.body.post,
-            req.body.responseTo,
-            req.body.poster,
-            req.body.media
-        );
 
-        await res.json({ message: result });
+        if (req.file) {
+            resize.makeThumbnail(req.file.path, req.file.filename);
+            const result = await postModel.updatePost(
+                req.body.postId,
+                req.body.post,
+                req.body.responseTo,
+                req.body.poster,
+                req.file.filename
+            );
+            await res.json({ message: result });
+        }
+        else 
+        {
+            const result = await postModel.updatePost(
+                req.body.postId,
+                req.body.post,
+                req.body.responseTo,
+                req.body.poster,
+                req.body.media
+            );
+            await res.json({ message: result });
+        }
     }
 };
 
@@ -125,9 +139,7 @@ const post_delete = async (req, res) => {
 
 const post_create = async (req, res) => {
     const errors = validationResult(req);
-
-    console.log(req);
-    console.log("Pass:" + JSON.stringify(req.body));
+    console.log(JSON.stringify(req.body));
 
     // Validate input
     if (!errors.isEmpty()) {

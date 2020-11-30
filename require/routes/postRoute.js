@@ -27,8 +27,8 @@ router.use(passport.initialize());
 router.get('/:postId', postController.posts_get);
 router.get('/', postController.posts_get);
 
-router.put('/', [
-  validate('postId', "postId does not exist").exists().notEmpty()
+router.put('/', upload.single('media'), [
+  validate('postId', "postId does not exist").exists()
 ], passport.authenticate('jwt', { session: false }), postController.post_update);
 
 router.post('/', upload.single('media'), [

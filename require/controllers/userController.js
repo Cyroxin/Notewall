@@ -77,8 +77,7 @@ const user_delete = async (req, res) => {
     console.log("Refused");
     console.log(errors);
     return res.status(400).json({
-      message: errors.array(),
-      user: false
+      message: errors.array()
     });
 
   }
