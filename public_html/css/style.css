@@ -2,6 +2,7 @@
 
 * {
     box-sizing: border-box;
+    margin: 0;
 }
 
 body {
@@ -50,7 +51,7 @@ body {
 }
 
 .note .main {
-    background-color: #b2fae3;
+    background-color: white;
     overflow: hidden;
     height: 400px;
     width: 100%;
@@ -63,6 +64,7 @@ body {
     border: none;
     height: 400px;
     width: 100%;
+    resize: none;
 }
 
 .note .hidden {
