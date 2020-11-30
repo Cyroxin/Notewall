@@ -7,13 +7,29 @@ const bcrypt = require('bcryptjs');
 
 const { validationResult } = require('express-validator');
 const userModel = require('../models/userModel');
+const { getUsers } = require('../models/userModel');
 
 const users_get = async (req, res) => {
   console.log(req.body);
-  console.log(req.body.name);
+  console.log(req.query);
+
+  var user = jwt.verify(req.headers.authorization.split(' ')[1], "your_jwt_secret");
+  if (user.name != "Admin")
+    return res.status(400).json({
+      message: 'You lack priviledges to view this data.',
+      user: false
+    });
 
   if (req.params.name != null) {
     res.json(await userModel.getUsers(req.params.name));
+  }
+  else if (Object.keys(req.query).length != 0) {
+    res.json(
+      await userModel.getUsers(
+        req.query.name,
+        req.query.email
+      )
+    );
   }
   else {
     res.json(
@@ -34,13 +50,23 @@ const user_update = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   else {
-    await userModel.updateUser(
-      req.body.name,
-      req.body.email,
-      req.body.pass
-    );
 
-    res.status("204").end();
+    var user = jwt.verify(req.headers.authorization.split(' ')[1], "your_jwt_secret");
+
+    if (user.name != req.body.name && user.name != "Admin")
+      return res.status(400).json({
+        message: 'You cannot modify the user details of another person.',
+        user: false
+      });
+
+    const hashedpass = req.body.pass != null ? bcrypt.hashSync(req.body.pass) : null;
+
+    res.json(
+      await userModel.updateUser(
+        req.body.name,
+        req.body.email,
+        hashedpass
+      ));
   }
 };
 
@@ -50,15 +76,39 @@ const user_delete = async (req, res) => {
   if (!errors.isEmpty()) {
     console.log("Refused");
     console.log(errors);
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({
+      message: errors.array(),
+      user: false
+    });
+
   }
   else {
-    if (req.params.name != null) // Passed in path
-      await userModel.deleteUser(req.params.name);
-    else // Passed in body
-      await userModel.deleteUser(req.body.name);
+    var user = jwt.verify(req.headers.authorization.split(' ')[1], "your_jwt_secret");
 
-    res.status("204").end();
+    if (req.params.name != null) // Passed in path
+    {
+      if (user.name != req.params.name && user.name != "Admin")
+        return res.status(400).json({
+          message: 'You cannot delete the user details others.',
+          user: false
+        });
+
+      res.json(
+        await userModel.deleteUser(req.params.name)
+      );
+    }
+    else // Passed in body
+    {
+      if (user.name != req.body.name && user.name != "Admin")
+        return res.status(400).json({
+          message: 'You cannot delete the user details others.',
+          user: false
+        });
+
+      res.json(
+        await userModel.deleteUser(req.body.name)
+      );
+    }
   }
 };
 
@@ -77,7 +127,7 @@ const user_create = async (req, res, next) => {
 
     const hashedpass = bcrypt.hashSync(req.body.pass);
 
-    if (await userModel.addUser(req.body.name,req.body.email,hashedpass)) {
+    if (await userModel.addUser(req.body.name, req.body.email, hashedpass)) {
       next();
     } else {
       res.status(400).json({ error: 'register error' });
@@ -88,8 +138,6 @@ const user_create = async (req, res, next) => {
 const login = (req, res) => {
   console.log('Login');
 
-
-  console.log(req.body);
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err || !user) {
       console.log("Error: " + err);

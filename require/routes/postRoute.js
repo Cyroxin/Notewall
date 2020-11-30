@@ -25,34 +25,21 @@ router.use(passport.initialize());
 // Route
 
 router.get('/:postId', postController.posts_get);
-router.get('/', [
-  validate('postId', "postId does not exist").optional().notEmpty(),
-  validate('post', "post does not exist").optional().notEmpty(),
-  validate('responseTo', "responseTo does not exist").optional().notEmpty(),
-  validate('poster', "poster does not exist").optional().notEmpty(),
-  validate('media', "media does not exist").optional().notEmpty(),
-  validate('skip', "skip does not exist").optional().notEmpty(),
-  validate('take', "take does not exist").optional().notEmpty()
-], postController.posts_get);
+router.get('/', postController.posts_get);
 
 router.put('/', [
-  validate('postId', "postId does not exist").exists().notEmpty(),
-  validate('post', "post does not exist").optional().notEmpty(),
-  validate('responseTo', "responseTo does not exist").optional().notEmpty(),
-  validate('media', "media does not exist").optional().notEmpty()
-],passport.authenticate('jwt', { session: false }), postController.post_update);
+  validate('postId', "postId does not exist").exists().notEmpty()
+], passport.authenticate('jwt', { session: false }), postController.post_update);
 
 router.post('/', upload.single('media'), [
   validate('poster', "poster does not exist").exists().notEmpty(),
-  validate('post', "post does not exist").exists().notEmpty(),
-  validate('responseTo', "responseTo does not exist").optional().notEmpty(),
-  validate('media', "media does not exist").optional().notEmpty()
-],passport.authenticate('jwt', { session: false }), postController.post_create);
+  validate('post', "post does not exist").exists().notEmpty()
+], passport.authenticate('jwt', { session: false }), postController.post_create);
 
 router.delete('/:postId', postController.post_delete);
 router.delete('/', [
   validate('postId', "postId does not exist").exists().notEmpty()
-],passport.authenticate('jwt', { session: false }), postController.post_delete);
+], passport.authenticate('jwt', { session: false }), postController.post_delete);
 
 // Run
 module.exports = router;

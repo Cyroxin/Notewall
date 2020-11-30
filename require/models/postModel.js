@@ -18,30 +18,30 @@ const promisePool = pool.promise();
 */
 const getPosts = async (postId = null, post = null, responseTo = null, poster = null, media = null, skip = 0, take = 10 ) => {
   try {
-    console.log('Get post: ?', postId);
+    console.log('Get post: ' + postId);
     var query = 'SELECT * FROM posts WHERE ';
     var params = [];
 
     // FILTER
 
-    if (postId !== null) {
+    if (postId !== null && postId !== "null") {
       query = query.concat("postId = ?");
       params.push(postId);
     }
     else {
-      if (responseTo != null) {
+      if (responseTo != null && responseTo !== "null") {
         query = query.concat("responseTo = ? AND ");
         params.push(responseTo);
       }
-      if (poster != null) {
+      if (poster != null && poster !== "null") {
         query = query.concat("poster = ? AND ");
         params.push(poster);
       }
-      if (media != null) {
+      if (media != null && media !== "null") {
         query = query.concat("media = ? AND ");
         params.push(media);
       }
-      if (post != null) {
+      if (post != null && post !== "null") {
         query = query.concat("post LIKE ? AND ");
         params.push(post);
       }
@@ -54,10 +54,11 @@ const getPosts = async (postId = null, post = null, responseTo = null, poster = 
 
     // SKIP & TAKE (OFFSET 0 LIMIT 10)
     query = query.concat(" LIMIT ? OFFSET ? ");
-    params.push(take);
-    params.push(skip);
+    params.push(parseInt(take));
+    params.push(parseInt(skip));
 
     console.log(query);
+    console.log(params);
 
 
     const [rows] = await promisePool.query(query, params);
@@ -77,24 +78,24 @@ const getPosts = async (postId = null, post = null, responseTo = null, poster = 
 */
 const updatePost = async (postId, post = null, responseTo = null, poster = null, media = null) => {
   try {
-    console.log(`Update post: ?`, postId);
+    console.log('Update post: ' + postId);
     var query = 'UPDATE posts SET ';
     var params = [];
 
 
-    if (responseTo != null) {
+    if (responseTo != null && responseTo !== "null") {
       query = query.concat("responseTo = ?, ");
       params.push(responseTo);
     }
-    if (poster != null) {
+    if (poster != null && poster !== "null") {
       query = query.concat("poster = ?, ");
       params.push(poster);
     }
-    if (media != null) {
+    if (media != null && media !== "null") {
       query = query.concat("media = ?, ");
       params.push(media);
     }
-    if (post != null) {
+    if (post != null && post !== "null") {
       query = query.concat("post = ?, ");
       params.push(post);
     }
@@ -144,7 +145,7 @@ const addPost = async (poster, post, responseTo = null, media = null) => {
 const deletePost = async (postId) => {
   try {
     console.log(`Delete post: ?`, postId);
-    await promisePool.query("DELETE FROM posts WHERE postId=?", [postId]);
+    return await promisePool.query("DELETE FROM posts WHERE postId=?", [postId]);
   } catch (e) {
     console.log('error', e.message);
   }

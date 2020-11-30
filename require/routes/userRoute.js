@@ -19,15 +19,10 @@ router.use(passport.initialize());
 
 // Route
 router.get('/:name',passport.authenticate('jwt', { session: false }), userController.users_get);
-router.get('/', [
-  validate('name', "name does not exist").optional().notEmpty(),
-  validate('email', "email does not exist").optional().notEmpty()
-],passport.authenticate('jwt', { session: false }), userController.users_get);
+router.get('/',passport.authenticate('jwt', { session: false }), userController.users_get);
 
 router.put('/', [
-  validate('name', "name does not exist").exists().notEmpty(),
-  validate('pass', "pass does not exist").optional().notEmpty(),
-  validate('email', "email does not exist").optional().notEmpty()
+  validate('name', "name does not exist").exists().notEmpty()
 ],passport.authenticate('jwt', { session: false }), userController.user_update);
 
 router.delete('/:name', userController.user_delete);
@@ -51,7 +46,7 @@ router.post('/register', [
 
 // Login
 router.post('/login', userController.login);
-router.get('/logout', userController.logout);
+router.post('/logout', userController.logout);
 
 
 // Run

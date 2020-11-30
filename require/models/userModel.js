@@ -13,13 +13,13 @@ const promisePool = pool.promise();
     * email = non-unique email, can lead to many results.
 */
 async function getUsers(name = null, email = null, hidden = true) {
-  if (!hidden) console.log('Get user: ?,?, ?', name, email, hidden);
+  if (!hidden) console.log(`Get user: ${name},${email}, ${hidden}`);
   try {
-    if (name == null && email == null) {
+    if ((name == null && email == null) || (name == "null" && email == "null")) {
       const [rows] = await promisePool.query(`SELECT ${hidden ? "name,email" : "*"} FROM users`);
-      return rows;
+      return rows[0];
     }
-    else if (name != null) {
+    else if (name != null && name != "null") {
       const [rows] = await promisePool.query(`SELECT ${hidden ? "name,email" : "*"} FROM users WHERE name = ?`, [name]);
       return rows[0]; // We expect one result
     }
@@ -42,14 +42,14 @@ async function getUsers(name = null, email = null, hidden = true) {
     * pass = secret
 */
 async function updateUser(name, email = null, pass = null) {
-  console.log('Update user: ?,?,?', name, email, pass);
+  console.log(`Update user: ${name},${email},${pass}`);
   var params = [];
   email != null ? params.push(email) : {};
   pass != null ? params.push(pass) : {};
   params.push(name);
 
   try {
-    await promisePool.query(`UPDATE users SET ${email != null ? "email=?" : ""} 
+    return await promisePool.query(`UPDATE users SET ${email != null ? "email=?" : ""} 
     ${(email != null && pass != null) ? " , " : ""} 
     ${pass != null ? "pass=?" : ""}  
     WHERE name=?;`,params);
@@ -63,10 +63,10 @@ async function updateUser(name, email = null, pass = null) {
   deleteUser: Removes user. Must be provided a name which to delete.
 */
 async function deleteUser(name) {
-  console.log('Delete user: ?', name);
+  console.log('Delete user: '+ name);
 
   try {
-    await promisePool.query("DELETE FROM users WHERE name=?", [name]);
+    return await promisePool.query("DELETE FROM users WHERE name=?", [name]);
   } catch (e) {
     console.log('error', e.message);
   }
@@ -82,7 +82,7 @@ async function deleteUser(name) {
     * pass = secret
 */
 async function addUser(name, email, pass) {
-  console.log('Add user: ?,?,?', name, email, pass);
+  console.log(`Add user: ${name},${email},${pass}`);
 
 
   try {

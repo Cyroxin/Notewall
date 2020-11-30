@@ -29,18 +29,6 @@ passport.use('local', new LocalStrategy({
         return done(null, false);
       }
 
-      console.log(pass);
-      console.log(user.pass);
-
-      if(pass === user.pass)
-      {
-        console.log("MATCH!");
-      }
-      else if (pass == user.pass)
-      {
-        console.log("match...");
-      }
-
       if (!bcrypt.compareSync(pass,user.pass)) // incorrect password
       {
         return done(null, false);
