@@ -172,7 +172,7 @@ async function createPost(poster, post, responseTo = null, media = null) {
             headers: {
                 'Authorization': 'Bearer ' + sessionStorage.getItem('token')
             },
-            body: JSON.stringify(requestBody)
+            body: requestBody
         };
 
         const response = await fetch(url + `/posts`, options);
