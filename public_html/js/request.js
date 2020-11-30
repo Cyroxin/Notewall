@@ -111,7 +111,7 @@ async function updatePost(postId, post = null, responseTo = null, poster = null,
             headers: {
                 'Authorization': 'Bearer ' + sessionStorage.getItem('token')
             },
-            body: JSON.stringify(requestBody)
+            body: requestBody
         };
 
         const response = await fetch(url + `/posts`, options);
