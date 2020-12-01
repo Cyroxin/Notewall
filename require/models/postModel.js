@@ -52,16 +52,25 @@ const getPosts = async (postId = null, post = null, responseTo = null, poster = 
         query = query.slice(0, -5); // Remove ending " AND "
     }
 
-    // SKIP & TAKE (OFFSET 0 LIMIT 10)
-    query = query.concat(" LIMIT ? OFFSET ? ");
-    params.push(parseInt(take));
-    params.push(parseInt(skip));
+    // SKIP & TAKE
+    if(take != null && take != "null")
+    {
+      query = query.concat(" LIMIT ?");
+      params.push(parseInt(take));
+    }
+
+    if(skip != null && skip != "null")
+    {
+      query = query.concat(" OFFSET ?");
+      params.push(parseInt(skip));
+    }
 
     console.log(query);
     console.log(params);
 
 
     const [rows] = await promisePool.query(query, params);
+    console.log(rows);
     return rows;
   } catch (e) { console.log('error', e.message); }
 };

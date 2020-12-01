@@ -1,4 +1,6 @@
 'use strict';
+export { createPost, createPostWithMedia, getPosts, deletePost, updatePost, updatePostWithMedia, createUser, getUsers, deleteUser, updateUser, refresh, login, logout, isLoggedOn };
+
 const url = window.location.origin;
 //const url = 'https://localhost:8000'; // Todo: change url server side
 
@@ -16,7 +18,7 @@ async function getPosts(postId = null, post = null, responseTo = null, poster = 
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
         };
 
@@ -31,6 +33,7 @@ async function getPosts(postId = null, post = null, responseTo = null, poster = 
         else if(result.errors != null)
         {
             console.log(result.errors);
+            return;
         }
 
         return result;
@@ -54,7 +57,7 @@ async function deletePost(postId = null) {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         };
 
@@ -70,6 +73,7 @@ async function deletePost(postId = null) {
         else if(result.errors != null)
         {
             console.log(result.errors);
+            return;
         }
 
         return result;
@@ -86,7 +90,7 @@ async function updatePostWithMedia(postId, post = null, responseTo = null, poste
     input.type = 'file';
     input.id = 'media';
     input.click();
-    input.addEventListener('change', () => updatePost(postId,post,responseTo,poster, input.files[0]), false);
+    input.addEventListener('change', async () => {await updatePost(postId,post,responseTo,poster, input.files[0]); refresh();}, false);
 }
 
 // await updatePost(14,"postContent","responseToPostId","posterUsername","Media")
@@ -109,7 +113,7 @@ async function updatePost(postId, post = null, responseTo = null, poster = null,
         const options = {
             method: 'PUT',
             headers: {
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             body: requestBody
         };
@@ -126,6 +130,7 @@ async function updatePost(postId, post = null, responseTo = null, poster = null,
         else if(result.errors != null)
         {
             console.log(result.errors);
+            return;
         }
 
         console.log(result);
@@ -145,7 +150,7 @@ async function createPostWithMedia(poster, post, responseTo = null) {
     input.type = 'file';
     input.id = 'media';
     input.click();
-    input.addEventListener('change', () => createPost(poster,post,responseTo,input.files[0]), false);
+    input.addEventListener('change', async () => {await createPost(poster,post,responseTo,input.files[0]); refresh();}, false);
 }
 
 
@@ -170,7 +175,7 @@ async function createPost(poster, post, responseTo = null, media = null) {
         const options = {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             body: requestBody
         };
@@ -186,6 +191,7 @@ async function createPost(poster, post, responseTo = null, media = null) {
         else if(result.errors != null)
         {
             console.log(result.errors);
+            return;
         }
 
         return result;
@@ -203,8 +209,7 @@ async function login(name, pass) {
     try {
 
         if (isLoggedOn()) {
-            alert("You are already logged on");
-            return;
+            throw new Error("You are already logged on");
         }
 
         var requestBody = {
@@ -226,20 +231,23 @@ async function login(name, pass) {
         // save token
         // Error
         if (result.user != null && !result.user) {
-            alert(result.message);
-            return;
+            console.log(result.message);
+            throw new Error(result.message);
         }
         else if(result.errors != null)
         {
             console.log(result.errors);
+            throw new Error(result.errors);
         }
 
-        sessionStorage.setItem('token', result.token);
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('username', result.user.name);
 
         return result;
     }
     catch (e) {
         console.log(e.message);
+        throw new Error(result.errors);
     }
 }
 
@@ -256,7 +264,7 @@ async function logout() {
         const options = {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
             }
         };
 
@@ -265,14 +273,20 @@ async function logout() {
 
         // Remove token
         if (result.message == "logout")
-            sessionStorage.removeItem('token');
+        {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+        }
         else
-            console.error("Could not logout");
+        {
+            throw new Error("Could not logout");
+        }
 
         return result;
     }
     catch (e) {
         console.log(e.message);
+        throw new Error(e.message);
     }
 }
 
@@ -311,9 +325,12 @@ async function register(name, pass, email) {
         else if(result.errors != null)
         {
             console.log(result.errors);
+            alert("Could not register, user details may be taken or lacking in security");
+            return;
         }
 
-        sessionStorage.setItem('token', result.token);
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('username', result.user.name);
 
         return result;
     }
@@ -326,7 +343,7 @@ function createUser(name, pass, email) { return register(name, pass, email) }
 
 
 function isLoggedOn() {
-    return sessionStorage.getItem('token') != null;
+    return localStorage.getItem('token') != null;
 }
 
 // Refreshes page so changes can be seen. Optional if changes are manually shown.
@@ -350,7 +367,7 @@ async function getUsers(name = null, email = null) {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         };
 
@@ -365,6 +382,7 @@ async function getUsers(name = null, email = null) {
         else if(result.errors != null)
         {
             console.log(result.errors);
+            return;
         }
 
         return result;
@@ -394,7 +412,7 @@ async function updateUser(name, pass = null, email = null) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             body: JSON.stringify(requestBody)
         };
@@ -410,6 +428,7 @@ async function updateUser(name, pass = null, email = null) {
         else if(result.errors != null)
         {
             console.log(result.errors);
+            return;
         }
 
         return result;
@@ -437,7 +456,7 @@ async function deleteUser(name) {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             body: JSON.stringify(requestBody)
         };
@@ -453,6 +472,7 @@ async function deleteUser(name) {
         else if(result.errors != null)
         {
             console.log(result.errors);
+            return;
         }
 
         return result;

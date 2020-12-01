@@ -10,6 +10,8 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
         />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.1.1/marked.min.js"></script>
+        <script type="module" src="js/login.js" defer></script>
+        <script type="module" src="js/request.js" defer></script>
     </head>
     <style>
         /*set border to the form*/
@@ -90,23 +92,23 @@
     </style>
     <body>
     <!--Step 1 : Adding HTML-->
-    <form action="/action_page.php">
+    <form>
         <h2 style="text-align: center;">Login Form</h2>
 
         <div class="container">
             <label><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="uname" required>
+            <input id="name" type="text" placeholder="Enter Username" name="name" required>
 
             <label><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
+            <input id="pass" type="password" placeholder="Enter Password" name="pass" required>
 
-            <button type="submit">Login</button>
+            <button id="submit">Login</button>
             <input type="checkbox" checked="checked"> Remember me
         </div>
 
         <div class="container" style="background-color:#f1f1f1">
             <button type="button" class="cancelbtn">Cancel</button>
-            <span class="psw">Forgot <a href="#">password?</a></span>
+            <span class="psw">Forgot <a href="javascript:;">password?</a></span>
         </div>
     </form>
     

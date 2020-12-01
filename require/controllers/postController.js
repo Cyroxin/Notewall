@@ -56,7 +56,7 @@ const post_update = async (req, res) => {
 
 
         // Get post
-        const poster = postModel.getPosts(req.body.postId).poster;
+        const poster = (await postModel.getPosts(req.body.postId))[0].poster;
 
         // Validate access
         if (poster != user.name && user.name != "Admin")
@@ -107,7 +107,7 @@ const post_delete = async (req, res) => {
         if (req.params.postId != null) // Passed in path
         {
             // Get post
-            const poster = postModel.getPosts(req.params.postId).poster;
+            const poster = (await postModel.getPosts(req.params.postId))[0].poster;
 
             // Validate access
             if (poster != user.name && user.name != "Admin")
@@ -122,7 +122,7 @@ const post_delete = async (req, res) => {
         else // Passed in body
         {
             // Get post
-            const poster = postModel.getPosts(req.body.postId).poster;
+            const poster = (await postModel.getPosts(req.body.postId))[0].poster;
 
             // Validate access
             if (poster != user.name && user.name != "Admin")
