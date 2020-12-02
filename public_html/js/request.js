@@ -1,8 +1,8 @@
 'use strict';
 export { createPost, createPostWithMedia, getPosts, deletePost, updatePost, updatePostWithMedia, createUser, getUsers, deleteUser, updateUser, refresh, login, logout, register, isLoggedOn };
 
-const url = window.location.origin;
-//const url = 'https://localhost:8000'; // Todo: change url server side
+// You should write any url prefixes that you may require in the "/app" section when on a production machine.
+const url = window.location.hostname == "localhost" ? window.location.origin : window.location.origin + "/app";
 
 
 // Example: await getPosts(11) 
