@@ -16,7 +16,7 @@ const promisePool = pool.promise();
   
   Note: If postId is queried, all filters are ignored.
 */
-const getPosts = async (postId = null, post = null, responseTo = null, poster = null, media = null, skip = 0, take = 10 ) => {
+const getPosts = async (postId = null, post = null, responseTo = null, poster = null, media = null, skip = null, take = null ) => {
   try {
     console.log('Get post: ' + postId);
     var query = 'SELECT * FROM posts WHERE ';

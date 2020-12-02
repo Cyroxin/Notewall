@@ -6,7 +6,7 @@ document.getElementById("submit").addEventListener("click", (e) => {
     if (request.isLoggedOn()) 
     {
         request.logout().then(e => {
-            request.login(document.getElementById("name").value, document.getElementById("pass").value).then(e => {
+            request.register(document.getElementById("name").value, document.getElementById("pass").value,document.getElementById("email").value).then(e => {
 
                 console.log("Returning back 1");
                 window.location.href="../index.html";
@@ -18,7 +18,7 @@ document.getElementById("submit").addEventListener("click", (e) => {
         console.log("User was already logged on, logging him off.");
     }
     else {
-        request.login(document.getElementById("name").value, document.getElementById("pass").value).then(e => {
+        request.register(document.getElementById("name").value, document.getElementById("pass").value,document.getElementById("email").value).then(e => {
 
             console.log("Returning back 2");
             window.location.href="../index.html";

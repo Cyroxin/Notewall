@@ -106,7 +106,8 @@ function parseAndRunSearch() {
 
             request.getPosts(postId, post, responseTo, poster, media, skip, take)
                 .then(function (result) {
-                    if (result != null && result.user != false) {
+                    if (result != null && result.user != false && result.length > 0) 
+                    {
                         localStorage.setItem("notes", JSON.stringify(result));
                         //console.log(JSON.stringify(result));
                         request.refresh();
@@ -120,7 +121,7 @@ function parseAndRunSearch() {
         {
             request.getPosts(null, `%${searchBar.value}%`)
                 .then(function (result) {
-                    if (result != null && result.user != false) {
+                    if (result != null && result.user != false && result.length > 0) {
                         localStorage.setItem("notes", JSON.stringify(result));
                         //console.log(JSON.stringify(result));
                         request.refresh();
@@ -157,19 +158,31 @@ function addNewNote(post) {
 
     note.innerHTML = `
         <div class="notes" id="${post.postId}">
-            <div class="tools">
-                <a class="name" href="javascript:;">${post.poster}</a>
+            <div class="tools" style="white-space: nowrap; overflow:hidden;">
+                <a class="postId" href="javascript:;" style="text-decoration:none;color:white;">${post.postId}</a> &nbsp;
+                ${post.responseTo ? `<i class="fas fa-angle-double-right" aria-hidden="true"></i> &nbsp;
+                <a class="responseTo" href="javascript:;" style="text-decoration:none;color:white;">${post.responseTo}</a> &nbsp;` : ""} &nbsp; 
+
+                <i class="fas fa-user" aria-hidden="true"></i> &nbsp;
+
+                <a class="name" href="javascript:;" style="text-decoration:none; color:white; text-overflow: ellipsis;overflow: hidden; white-space:nowrap;">${post.poster}</a>
+
+                <button style="margin-left: auto;" class="reply"><i class="fas fa-reply"></i></button>
                 <button class="upload"><i class="fas fa-file-image"></i></button>
                 <button class="edit"><i class="fas fa-edit"></i></button>
                 <button class="delete"><i class="fas fa-trash-alt"></i></button>
             </div>
-            ${post.media ? `<img style="width: 400px; height: 400px;" class="image hidden" src="thumbnails/${post.media}">` : ""}
+            ${post.media ? `<div style="vertical-align: middle;"><img style="max-width:100%; max-height:100%; object-fit: contain;" class="image hidden" src="thumbnails/${post.media}"></div>` : ""}
             <div class="main ${post.post ? "" : "hidden"}"></div>
             <textarea class="${post.post ? "hidden" : ""}"></textarea>
         </div>
     `;
 
+    const postIdText = note.querySelector(".postId");
+    const responseToText = post.responseTo ? note.querySelector(".responseTo") : null;
     const userText = note.querySelector(".name");
+
+    const replyBtn = note.querySelector(".reply");
     const uploadBtn = note.querySelector(".upload");
     const editBtn = note.querySelector(".edit");
     const deleteBtn = note.querySelector(".delete");
@@ -181,9 +194,37 @@ function addNewNote(post) {
     textArea.value = post.post;
     main.innerHTML = marked(post.post);
 
+    postIdText.addEventListener("click", () => {
+        searchBar.value = `!responseTo=${post.postId}`;
+        parseAndRunSearch();
+    });
+
+    if (post.responseTo) {
+        responseToText.addEventListener("click", () => {
+            searchBar.value = `!postId=${post.responseTo}`;
+            parseAndRunSearch();
+        });
+    }
+
     userText.addEventListener("click", () => {
         searchBar.value = `!poster=${post.poster}`;
         parseAndRunSearch();
+    });
+
+    replyBtn.addEventListener("click", () => {
+        if(!img.classList.contains("hidden")) return;
+        
+        request.createPost(localStorage.getItem("username"), " ", post.postId)
+            .then(function (result) {
+                if (result != null && result.user != false) {
+                    //addNewNote();
+                    localStorage.removeItem("notes");
+                    request.refresh();
+                }
+            })
+            .catch(function (error) {
+                console.log("Error" + error);
+            });
     });
 
 
@@ -211,6 +252,7 @@ function addNewNote(post) {
     });
 
     editBtn.addEventListener("click", () => {
+        if(!img.classList.contains("hidden")) return;
 
         if (!request.isLoggedOn()) {
             alert("You must be logged in to do this.");
@@ -240,6 +282,7 @@ function addNewNote(post) {
     });
 
     deleteBtn.addEventListener("click", () => {
+        if(!img.classList.contains("hidden")) return;
 
         request.deletePost(post.postId)
             .then(function (result) {

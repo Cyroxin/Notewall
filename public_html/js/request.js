@@ -1,5 +1,5 @@
 'use strict';
-export { createPost, createPostWithMedia, getPosts, deletePost, updatePost, updatePostWithMedia, createUser, getUsers, deleteUser, updateUser, refresh, login, logout, isLoggedOn };
+export { createPost, createPostWithMedia, getPosts, deletePost, updatePost, updatePostWithMedia, createUser, getUsers, deleteUser, updateUser, refresh, login, logout, register, isLoggedOn };
 
 const url = window.location.origin;
 //const url = 'https://localhost:8000'; // Todo: change url server side
@@ -8,7 +8,7 @@ const url = window.location.origin;
 // Example: await getPosts(11) 
 // Example: await getPosts(null, "%story%")
 // Example: await getPosts(null, null, null, "John") 
-async function getPosts(postId = null, post = null, responseTo = null, poster = null, media = null, skip = 0, take = 10) {
+async function getPosts(postId = null, post = null, responseTo = null, poster = null, media = null, skip = null, take = null) {
 
     try {
         console.log(postId);
