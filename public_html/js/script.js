@@ -165,7 +165,7 @@ function addNewNote(post) {
 
                 <i class="fas fa-user" aria-hidden="true"></i> &nbsp;
 
-                <a class="name" href="javascript:;" style="text-decoration:none; color:white; text-overflow: ellipsis;overflow: hidden; white-space:nowrap;">${post.poster}</a>
+                <a class="name" href="javascript:;" style="${post.poster == localStorage.getItem("username") ? "" : "text-decoration:none;"} color:white; text-overflow: ellipsis;overflow: hidden; white-space:nowrap;">${post.poster}</a>
 
                 <button style="margin-left: auto;" class="reply"><i class="fas fa-reply"></i></button>
                 <button class="upload"><i class="fas fa-file-image"></i></button>
