@@ -9,7 +9,7 @@ document.getElementById("submit").addEventListener("click", (e) => {
             request.register(document.getElementById("name").value, document.getElementById("pass").value,document.getElementById("email").value).then(e => {
 
                 console.log("Returning back 1");
-                window.location.href="../index.html";
+                window.location.href= request.url + "/index.html";
 
             }).catch(err => { alert(err.message); console.log(err.message);});
 
@@ -21,7 +21,7 @@ document.getElementById("submit").addEventListener("click", (e) => {
         request.register(document.getElementById("name").value, document.getElementById("pass").value,document.getElementById("email").value).then(e => {
 
             console.log("Returning back 2");
-            window.location.href="../index.html";
+            window.location.href = request.url + "/index.html";
 
         }).catch(err => { alert(err.message); console.log(err.message);});
     }

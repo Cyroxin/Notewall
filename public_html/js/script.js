@@ -212,7 +212,7 @@ function addNewNote(post) {
     });
 
     replyBtn.addEventListener("click", () => {
-        if(!img.classList.contains("hidden")) return;
+        if(img != null && !img.classList.contains("hidden")) return;
         
         request.createPost(localStorage.getItem("username"), " ", post.postId)
             .then(function (result) {
@@ -252,7 +252,7 @@ function addNewNote(post) {
     });
 
     editBtn.addEventListener("click", () => {
-        if(!img.classList.contains("hidden")) return;
+        if(img != null && !img.classList.contains("hidden")) return;
 
         if (!request.isLoggedOn()) {
             alert("You must be logged in to do this.");
@@ -282,7 +282,7 @@ function addNewNote(post) {
     });
 
     deleteBtn.addEventListener("click", () => {
-        if(!img.classList.contains("hidden")) return;
+        if(img != null && !img.classList.contains("hidden")) return;
 
         request.deletePost(post.postId)
             .then(function (result) {
