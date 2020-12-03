@@ -106,8 +106,7 @@ function parseAndRunSearch() {
 
             request.getPosts(postId, post, responseTo, poster, media, skip, take)
                 .then(function (result) {
-                    if (result != null && result.user != false && result.length > 0) 
-                    {
+                    if (result != null && result.user != false && result.length > 0) {
                         localStorage.setItem("notes", JSON.stringify(result));
                         //console.log(JSON.stringify(result));
                         request.refresh();
@@ -172,7 +171,7 @@ function addNewNote(post) {
                 <button class="edit"><i class="fas fa-edit"></i></button>
                 <button class="delete"><i class="fas fa-trash-alt"></i></button>
             </div>
-            ${post.media ? `<div style="vertical-align: middle;"><img style="max-width:100%; max-height:100%; object-fit: contain;" class="image hidden" src="thumbnails/${post.media}"></div>` : ""}
+            ${post.media ? `<img style="height:400px; width:100%; background-color:white" class="image hidden" src="thumbnails/${post.media}">` : ""}
             <div class="main ${post.post ? "" : "hidden"}"></div>
             <textarea class="${post.post ? "hidden" : ""}"></textarea>
         </div>
@@ -212,8 +211,8 @@ function addNewNote(post) {
     });
 
     replyBtn.addEventListener("click", () => {
-        if(img != null && !img.classList.contains("hidden")) return;
-        
+        if (img != null && !img.classList.contains("hidden")) return;
+
         request.createPost(localStorage.getItem("username"), " ", post.postId)
             .then(function (result) {
                 if (result != null && result.user != false) {
@@ -252,7 +251,7 @@ function addNewNote(post) {
     });
 
     editBtn.addEventListener("click", () => {
-        if(img != null && !img.classList.contains("hidden")) return;
+        if (img != null && !img.classList.contains("hidden")) return;
 
         if (!request.isLoggedOn()) {
             alert("You must be logged in to do this.");
@@ -282,7 +281,7 @@ function addNewNote(post) {
     });
 
     deleteBtn.addEventListener("click", () => {
-        if(img != null && !img.classList.contains("hidden")) return;
+        if (img != null && !img.classList.contains("hidden")) return;
 
         request.deletePost(post.postId)
             .then(function (result) {
