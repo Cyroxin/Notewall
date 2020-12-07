@@ -113,10 +113,12 @@ body {
     outline: none;
     font-family: inherit;
     font-size: 1.2rem;
-    border: none;
     height: 400px;
     width: 100%;
     resize: none;
+    border-style: solid;
+    border-color: yellow;
+    border-width: 10px;
 }
 
 .note .hidden {
