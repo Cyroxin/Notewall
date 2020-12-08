@@ -1,5 +1,5 @@
 'use strict';
-export { url, createPost, createPostWithMedia, getPosts, deletePost, updatePost, updatePostWithMedia, createUser, getUsers, deleteUser, updateUser, refresh, login, logout, register, isLoggedOn };
+export { url, createPost, createPostWithMedia, getPosts, deletePost, updatePost, updatePostWithMedia, getUsers, deleteUser, updateUser, refresh, login, logout, register, isLoggedOn };
 
 // You should write any url prefixes that you may require in the "/app" section when on a production machine.
 const url = window.location.hostname == "localhost" ? window.location.origin : window.location.origin + "/app";
@@ -8,12 +8,12 @@ const url = window.location.hostname == "localhost" ? window.location.origin : w
 // Example: await getPosts(11) 
 // Example: await getPosts(null, "%story%")
 // Example: await getPosts(null, null, null, "John") 
-async function getPosts(postId = null, post = null, responseTo = null, poster = null, media = null, skip = null, take = null) {
+const getPosts = async (postId = null, post = null, responseTo = null, poster = null, media = null, skip = null, take = null) => {
 
     try {
         console.log(postId);
 
-        var requestBody = `postId=${postId}&post=${post}&responseTo=${responseTo}&poster=${poster}&media=${media}&skip=${skip}&take=${take}`;
+        let requestBody = `postId=${postId}&post=${post}&responseTo=${responseTo}&poster=${poster}&media=${media}&skip=${skip}&take=${take}`;
 
         const options = {
             headers: {
@@ -44,7 +44,7 @@ async function getPosts(postId = null, post = null, responseTo = null, poster = 
 }
 
 // await deletePost(11)
-async function deletePost(postId = null) {
+const deletePost = async (postId = null) => {
 
     try {
 
@@ -85,8 +85,8 @@ async function deletePost(postId = null) {
 
 // Updates a post with media and sends a file request gui to the user.
 // await createPostWithMedia("posterUsername","postContent","responseToPostId")
-async function updatePostWithMedia(postId, post = null, responseTo = null, poster = null) {
-    var input = document.createElement('input');
+const updatePostWithMedia = async (postId, post = null, responseTo = null, poster = null) => {
+    let input = document.createElement('input');
     input.type = 'file';
     input.id = 'media';
     input.click();
@@ -94,7 +94,7 @@ async function updatePostWithMedia(postId, post = null, responseTo = null, poste
 }
 
 // await updatePost(14,"postContent","responseToPostId","posterUsername","Media")
-async function updatePost(postId, post = null, responseTo = null, poster = null, media = null) {
+const updatePost = async (postId, post = null, responseTo = null, poster = null, media = null) => {
 
     try {
 
@@ -145,8 +145,8 @@ async function updatePost(postId, post = null, responseTo = null, poster = null,
 
 // Creates a new post and sends a file request gui to the user.
 // await createPostWithMedia("posterUsername","postContent","responseToPostId")
-async function createPostWithMedia(poster, post, responseTo = null) {
-    var input = document.createElement('input');
+const createPostWithMedia = async (poster, post, responseTo = null) => {
+    let input = document.createElement('input');
     input.type = 'file';
     input.id = 'media';
     input.click();
@@ -157,7 +157,7 @@ async function createPostWithMedia(poster, post, responseTo = null) {
 // Creates a new post, does not upload media, do not use the media parameter.
 // await createPost("posterUsername","postContent","responseToPostId")
 // await createPost("posterUsername","postContent","responseToPostId",selectMedia)
-async function createPost(poster, post, responseTo = null, media = null) {
+const createPost = async (poster, post, responseTo = null, media = null) => {
 
     try {
 
@@ -204,7 +204,7 @@ async function createPost(poster, post, responseTo = null, media = null) {
 /* USER REQUESTS */
 
 // await login("name","pass")
-async function login(name, pass) {
+const login = async (name, pass) => {
 
     try {
 
@@ -212,7 +212,7 @@ async function login(name, pass) {
             throw new Error("You are already logged on");
         }
 
-        var requestBody = {
+        let requestBody = {
             "name": name,
             "pass": pass
         };
@@ -252,7 +252,7 @@ async function login(name, pass) {
 }
 
 // await logout()
-async function logout() {
+const logout = async () => {
 
     try {
 
@@ -292,7 +292,7 @@ async function logout() {
 
 // Registers and logs the user on.
 // await register("name","pass","email@mail.com")
-async function register(name, pass, email) {
+const register = async (name, pass, email) => {
 
     try {
         if (isLoggedOn()) {
@@ -300,7 +300,7 @@ async function register(name, pass, email) {
             return;
         }
 
-        var requestBody = {
+        let requestBody = {
             "name": name,
             "pass": pass,
             "email": email
@@ -339,22 +339,19 @@ async function register(name, pass, email) {
     }
 }
 
-function createUser(name, pass, email) { return register(name, pass, email) }
-
-
-function isLoggedOn() {
+const isLoggedOn = () => {
     return localStorage.getItem('token') != null;
 }
 
 // Refreshes page so changes can be seen. Optional if changes are manually shown.
-function refresh() {
+const refresh = () =>  {
     location.reload(); // Refresh page
 }
 
 // Gets users depending on either name, email or both.
 // await getUsers("name","email@mail.com")
 // await getUsers(null,"johns@mail.com")
-async function getUsers(name = null, email = null) {
+const getUsers = async (name = null, email = null) => {
 
     try {
         if (!isLoggedOn()) {
@@ -362,7 +359,7 @@ async function getUsers(name = null, email = null) {
             return;
         }
 
-        var requestBody = `name=${name}&email=${email}`;
+        let requestBody = `name=${name}&email=${email}`;
 
         const options = {
             headers: {
@@ -394,7 +391,7 @@ async function getUsers(name = null, email = null) {
 
 // Updates the user information of a specific user.
 // await updateUser("name","pass","email@mail.com")
-async function updateUser(name, pass = null, email = null) {
+const updateUser = async (name, pass = null, email = null) => {
 
     try {
         if (!isLoggedOn()) {
@@ -402,7 +399,7 @@ async function updateUser(name, pass = null, email = null) {
             return;
         }
 
-        var requestBody = {
+        let requestBody = {
             "name": name,
             "pass": pass,
             "email": email
@@ -440,7 +437,7 @@ async function updateUser(name, pass = null, email = null) {
 
 // Deletes a specific user
 // await deleteUser("name")
-async function deleteUser(name) {
+const deleteUser = async (name) => {
 
     try {
         if (!isLoggedOn()) {
@@ -448,7 +445,7 @@ async function deleteUser(name) {
             return;
         }
 
-        var requestBody = {
+        let requestBody = {
             "name": name
         };
 
