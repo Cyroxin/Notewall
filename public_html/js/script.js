@@ -28,7 +28,7 @@ userIcon.onclick = (e) => {
 
 console.log("Adding notes...");
 
-if (localStorage.getItem("notes") == null)
+if (localStorage.getItem("notes") == null || localStorage.getItem("notes") == "undefined")
     request.getPosts()
         .then(function (result) {
             // It worked, use the result
@@ -42,7 +42,9 @@ if (localStorage.getItem("notes") == null)
             console.log("Error getting notes: " + error)
         });
 
-
+// If an error is hit here, check that you can access the database. 
+// Sometimes databases may require a specific vpn or proxy to be enabled.
+// When you do get an error here, you need to delete the old note.
 const posts = JSON.parse(localStorage.getItem("notes"));
 
 
@@ -172,8 +174,8 @@ function addNewNote(post) {
                 <button class="delete"><i class="fas fa-trash-alt"></i></button>
             </div>
             ${post.media ? `<img style="height:400px; width:100%; background-color:white" class="image hidden" src="thumbnails/${post.media}">` : ""}
-            <div class="main ${post.post ? "" : "hidden"}"></div>
-            <textarea class="${post.post ? "hidden" : ""}"></textarea>
+            <div class="main ${post.post != undefined ? "" : "hidden"}"></div>
+            <textarea class="${post.post != undefined ? "hidden" : ""}"></textarea>
         </div>
     `;
 

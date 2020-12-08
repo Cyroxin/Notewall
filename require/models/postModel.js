@@ -52,6 +52,9 @@ const getPosts = async (postId = null, post = null, responseTo = null, poster = 
         query = query.slice(0, -5); // Remove ending " AND "
     }
 
+    // Put the newest posts to the top.
+    query = query.concat(" ORDER BY postId DESC");
+
     // SKIP & TAKE
     if(take != null && take != "null")
     {
