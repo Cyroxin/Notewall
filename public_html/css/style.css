@@ -25,6 +25,8 @@ body {
     
 }
 
+/* TOOLS */
+
 #toolcontainer
 {
     position: fixed;
@@ -36,14 +38,14 @@ body {
 }
 
 .add {
-    background-color: #06686b;
-    border-radius: 3px;
+    color: #06686b;
     border: none;
-    color: white;
+    text-decoration:none; 
     cursor: pointer;
-    padding: 0.5rem 1rem;
+    text-align:center;
+
+    margin-right: 0.2em;
     margin-left: auto;
-    margin-right: 0.5em;
 }
 
 .login
@@ -51,20 +53,17 @@ body {
     color: #06686b;
     background-color: white;
     border: none;
-    font-size: 2em;
     text-decoration:none; 
-    border-radius: 100px;
     cursor: pointer;
-    margin-right: 0.2em;
-    margin-left: 0.5em;
+    margin-right: 0.5em;
+    border-radius: 50%;
+    height: 1em;
+    width: 1em;
+    text-align:center;
 }
 
 .login.fa-sign-out-alt {
     background-color: transparent;
-    transform: scaleX(-1);
-    -moz-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    -ms-transform: scaleX(-1);
 }
 
 .search
@@ -75,7 +74,24 @@ body {
     text-decoration:none; 
     border-radius: 10px;
     max-width: 50vw;
+    margin-left: 0.5em;
 }
+
+.erase
+{
+    color: #06686b;
+    border: none;
+    text-decoration:none; 
+    cursor: pointer;
+    margin-right: 0.5em;
+    border-radius: 50%;
+    height: 1em;
+    width: 1em;
+    text-align:center;
+}
+
+/* NOTE */
+
 
 .note {
     background-color: #fff;
@@ -121,6 +137,7 @@ body {
     border-width: 10px;
 }
 
-.note .hidden {
+.note .hidden,
+.erase.hidden {
     display: none;
 }

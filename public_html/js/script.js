@@ -2,7 +2,10 @@ import * as request from './request.js';
 
 const addBtn = document.getElementById("add");
 const searchBar = document.getElementById("search");
+const eraseIcon = document.getElementById("erase");
 const userIcon = document.getElementById("user");
+
+/* LOGIN */
 
 if (request.isLoggedOn()) {
     userIcon.classList.toggle("fa-user-circle", false)
@@ -25,6 +28,8 @@ userIcon.onclick = (e) => {
             });
     }
 }
+
+/* LOAD NOTES */
 
 console.log("Adding notes...");
 
@@ -54,6 +59,8 @@ if (posts) {
     });
 }
 
+/* SEARCH BAR */
+
 searchBar.addEventListener("keypress", (e) => {
     console.log("key: " + JSON.stringify(e) + " - text:" + searchBar.value);
     if (e.key != "Enter") return;
@@ -62,6 +69,7 @@ searchBar.addEventListener("keypress", (e) => {
 
 function parseAndRunSearch() {
     try {
+
         if (searchBar.value[0] == '!') // Command!
         {
             console.log("command");
@@ -109,6 +117,7 @@ function parseAndRunSearch() {
             request.getPosts(postId, post, responseTo, poster, media, skip, take)
                 .then(function (result) {
                     if (result != null && result.user != false && result.length > 0) {
+                        localStorage.setItem("search",searchBar.value);
                         localStorage.setItem("notes", JSON.stringify(result));
                         //console.log(JSON.stringify(result));
                         request.refresh();
@@ -123,6 +132,7 @@ function parseAndRunSearch() {
             request.getPosts(null, `%${searchBar.value}%`)
                 .then(function (result) {
                     if (result != null && result.user != false && result.length > 0) {
+                        localStorage.setItem("search",searchBar.value);
                         localStorage.setItem("notes", JSON.stringify(result));
                         //console.log(JSON.stringify(result));
                         request.refresh();
@@ -135,6 +145,25 @@ function parseAndRunSearch() {
     }
     catch (err) { }
 }
+
+
+/* ERASE SEARCH */
+
+// Teach the user how to search using commands. 
+searchBar.value = localStorage.getItem("search");
+
+// Show erase searchbar icon only if searched something.
+eraseIcon.classList.toggle("hidden",localStorage.getItem("search") == "" || !localStorage.getItem("search"));
+
+
+eraseIcon.addEventListener("click", () => {
+    localStorage.removeItem("search");
+    localStorage.removeItem("notes");
+    request.refresh();
+});
+
+
+/* ADD ICON */
 
 addBtn.addEventListener("click", () => {
 
