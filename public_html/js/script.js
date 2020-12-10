@@ -195,7 +195,7 @@ function addNewNote(post) {
     note.classList.add("note");
 
     note.innerHTML = `
-        <div id="${post.postId}" style="display:flex; flex-direction:column;height:inherit;overflow:hidden;">
+        <div id="${post.postId}" style="display:flex; flex-direction:column;overflow:hidden;">
             <div class="tools" style="white-space: nowrap; overflow:hidden;">
                 <a class="postId" href="javascript:;" style="text-decoration:none;color:white;margin-left:0.1em;">${post.postId}</a>
                 ${post.responseTo ? `<i class="fas fa-angle-double-right" aria-hidden="true"></i>
