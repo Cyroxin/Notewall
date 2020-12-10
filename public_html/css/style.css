@@ -43,9 +43,7 @@ body {
     text-decoration:none; 
     cursor: pointer;
     text-align:center;
-
     margin-right: 0.2em;
-    margin-left: auto;
 }
 
 .login
@@ -138,6 +136,7 @@ body {
 }
 
 .note .hidden,
-.erase.hidden {
+.erase.hidden,
+.add.hidden {
     display: none;
 }

@@ -8,12 +8,16 @@ const userIcon = document.getElementById("user");
 /* LOGIN */
 
 if (request.isLoggedOn()) {
-    userIcon.classList.toggle("fa-user-circle", false)
-    userIcon.classList.toggle("fa-sign-out-alt", true)
+    userIcon.classList.toggle("fa-user-circle", false);
+    userIcon.classList.toggle("fa-sign-out-alt", true);
+
+    addBtn.classList.toggle("hidden", false);
 }
 else {
-    userIcon.classList.toggle("fa-user-circle", true)
-    userIcon.classList.toggle("fa-sign-out-alt", false)
+    userIcon.classList.toggle("fa-user-circle", true);
+    userIcon.classList.toggle("fa-sign-out-alt", false);
+
+    addBtn.classList.toggle("hidden", true);
 }
 
 userIcon.onclick = (e) => {
@@ -36,6 +40,10 @@ console.log("Adding notes...");
 if (localStorage.getItem("notes") == null || localStorage.getItem("notes") == "undefined")
     request.getPosts()
         .then(function (result) {
+            if (result == null) {
+                console.error("Error, you may not be connected properly (proxy/vpn?) or the server is having an issue.");
+                return;
+            }
             // It worked, use the result
             localStorage.setItem("notes", JSON.stringify(result));
             request.refresh();
@@ -117,7 +125,7 @@ function parseAndRunSearch() {
             request.getPosts(postId, post, responseTo, poster, media, skip, take)
                 .then(function (result) {
                     if (result != null && result.user != false && result.length > 0) {
-                        localStorage.setItem("search",searchBar.value);
+                        localStorage.setItem("search", searchBar.value);
                         localStorage.setItem("notes", JSON.stringify(result));
                         //console.log(JSON.stringify(result));
                         request.refresh();
@@ -132,7 +140,7 @@ function parseAndRunSearch() {
             request.getPosts(null, `%${searchBar.value}%`)
                 .then(function (result) {
                     if (result != null && result.user != false && result.length > 0) {
-                        localStorage.setItem("search",searchBar.value);
+                        localStorage.setItem("search", searchBar.value);
                         localStorage.setItem("notes", JSON.stringify(result));
                         //console.log(JSON.stringify(result));
                         request.refresh();
@@ -153,7 +161,7 @@ function parseAndRunSearch() {
 searchBar.value = localStorage.getItem("search");
 
 // Show erase searchbar icon only if searched something.
-eraseIcon.classList.toggle("hidden",localStorage.getItem("search") == "" || !localStorage.getItem("search"));
+eraseIcon.classList.toggle("hidden", localStorage.getItem("search") == "" || !localStorage.getItem("search"));
 
 
 eraseIcon.addEventListener("click", () => {
@@ -197,10 +205,10 @@ function addNewNote(post) {
 
                 <a class="name" href="javascript:;" style="${post.poster == localStorage.getItem("username") ? "" : "text-decoration:none;"} color:white; text-overflow: ellipsis;overflow: hidden; white-space:nowrap;">${post.poster}</a>
 
-                <button style="margin-left: auto;" class="reply"><i class="fas fa-reply"></i></button>
+                ${localStorage.getItem("username") != null ? `<button style="margin-left: auto;" class="reply"><i class="fas fa-reply"></i></button>
                 <button class="upload"><i class="fas fa-file-image"></i></button>
                 <button class="edit"><i class="fas fa-edit"></i></button>
-                <button class="delete"><i class="fas fa-trash-alt"></i></button>
+                <button class="delete"><i class="fas fa-trash-alt"></i></button>`: '<div style="margin-left: auto;"></div>'}
             </div>
             ${post.media ? `<img style="height:400px; width:100%; background-color:white" class="image hidden" src="thumbnails/${post.media}">` : ""}
             <div class="main ${post.post != undefined ? "" : "hidden"}"></div>
@@ -241,21 +249,22 @@ function addNewNote(post) {
         parseAndRunSearch();
     });
 
-    replyBtn.addEventListener("click", () => {
-        if (img != null && !img.classList.contains("hidden")) return;
+    if (replyBtn != null)
+        replyBtn.addEventListener("click", () => {
+            if (img != null && !img.classList.contains("hidden")) return;
 
-        request.createPost(localStorage.getItem("username"), " ", post.postId)
-            .then(function (result) {
-                if (result != null && result.user != false) {
-                    //addNewNote();
-                    localStorage.removeItem("notes");
-                    request.refresh();
-                }
-            })
-            .catch(function (error) {
-                console.log("Error" + error);
-            });
-    });
+            request.createPost(localStorage.getItem("username"), " ", post.postId)
+                .then(function (result) {
+                    if (result != null && result.user != false) {
+                        //addNewNote();
+                        localStorage.removeItem("notes");
+                        request.refresh();
+                    }
+                })
+                .catch(function (error) {
+                    console.log("Error" + error);
+                });
+        });
 
 
     if (post.media) {
@@ -271,30 +280,53 @@ function addNewNote(post) {
         });
     }
 
-    uploadBtn.addEventListener("click", () => {
-        request.updatePostWithMedia(post.postId)
-            .then(function (result) {
-                localStorage.removeItem("notes");
-            })
-            .catch(function (error) {
-                console.log("Error" + error);
-            });
-    });
+    if (uploadBtn != null)
+        uploadBtn.addEventListener("click", () => {
+            request.updatePostWithMedia(post.postId)
+                .then(function (result) {
+                    localStorage.removeItem("notes");
+                })
+                .catch(function (error) {
+                    console.log("Error" + error);
+                });
+        });
 
-    editBtn.addEventListener("click", () => {
-        if (img != null && !img.classList.contains("hidden")) return;
+    if (editBtn != null)
+        editBtn.addEventListener("click", () => {
+            if (img != null && !img.classList.contains("hidden")) return;
 
-        if (!request.isLoggedOn()) {
-            alert("You must be logged in to do this.");
-            return;
-        }
+            if (!request.isLoggedOn()) {
+                alert("You must be logged in to do this.");
+                return;
+            }
 
-        main.classList.toggle("hidden");
-        textArea.classList.toggle("hidden");
+            main.classList.toggle("hidden");
+            textArea.classList.toggle("hidden");
 
-        // Finished editing, update.
-        if (!main.classList.contains("hidden")) {
-            request.updatePost(post.postId, main.innerText)
+            // Finished editing, update.
+            if (!main.classList.contains("hidden")) {
+                request.updatePost(post.postId, main.innerText)
+                    .then(function (result) {
+                        if (result != null && result.user != false) {
+                            //note.remove();
+                            //updateLS();
+                            localStorage.removeItem("notes");
+                            request.refresh();
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log("Error" + error);
+                    });
+            }
+
+
+        });
+
+    if (deleteBtn != null)
+        deleteBtn.addEventListener("click", () => {
+            if (img != null && !img.classList.contains("hidden")) return;
+
+            request.deletePost(post.postId)
                 .then(function (result) {
                     if (result != null && result.user != false) {
                         //note.remove();
@@ -306,27 +338,7 @@ function addNewNote(post) {
                 .catch(function (error) {
                     console.log("Error" + error);
                 });
-        }
-
-
-    });
-
-    deleteBtn.addEventListener("click", () => {
-        if (img != null && !img.classList.contains("hidden")) return;
-
-        request.deletePost(post.postId)
-            .then(function (result) {
-                if (result != null && result.user != false) {
-                    //note.remove();
-                    //updateLS();
-                    localStorage.removeItem("notes");
-                    request.refresh();
-                }
-            })
-            .catch(function (error) {
-                console.log("Error" + error);
-            });
-    });
+        });
 
     textArea.addEventListener("input", (e) => {
         const { value } = e.target;
