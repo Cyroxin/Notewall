@@ -213,7 +213,7 @@ function addNewNote(post) {
                 <button class="edit"><i class="fas fa-edit"></i></button>
                 <button class="delete"><i class="fas fa-trash-alt"></i></button>`: ''}
             </div>
-            ${post.media ? `<img style="height:100%; width:100%;" class="image hidden" src="thumbnails/${post.media}">` : ""}
+            ${post.media ? `<img style="height:92%; width:100%;" class="image hidden" src="thumbnails/${post.media}">` : ""}
             <div class="main ${post.post != undefined ? "" : "hidden"}"></div>
             <textarea class="${post.post != undefined ? "hidden" : ""}"></textarea>
         </div>
