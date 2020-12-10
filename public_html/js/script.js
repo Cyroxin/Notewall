@@ -195,22 +195,25 @@ function addNewNote(post) {
     note.classList.add("note");
 
     note.innerHTML = `
-        <div class="notes" id="${post.postId}">
+        <div id="${post.postId}" style="display:flex; flex-direction:column;height:inherit;overflow:hidden;">
             <div class="tools" style="white-space: nowrap; overflow:hidden;">
-                <a class="postId" href="javascript:;" style="text-decoration:none;color:white;">${post.postId}</a> &nbsp;
-                ${post.responseTo ? `<i class="fas fa-angle-double-right" aria-hidden="true"></i> &nbsp;
-                <a class="responseTo" href="javascript:;" style="text-decoration:none;color:white;">${post.responseTo}</a> &nbsp;` : ""} &nbsp; 
+                <a class="postId" href="javascript:;" style="text-decoration:none;color:white;margin-left:0.1em;">${post.postId}</a>
+                ${post.responseTo ? `<i class="fas fa-angle-double-right" aria-hidden="true"></i>
+                <a class="responseTo" href="javascript:;" style="text-decoration:none;color:white;">${post.responseTo}</a>` : ""}
 
-                <i class="fas fa-user" aria-hidden="true"></i> &nbsp;
+                <i class="fas fa-user" aria-hidden="true" style="margin-left:0.2em; margin-right:0.2em;"></i>
 
                 <a class="name" href="javascript:;" style="${post.poster == localStorage.getItem("username") ? "" : "text-decoration:none;"} color:white; text-overflow: ellipsis;overflow: hidden; white-space:nowrap;">${post.poster}</a>
 
-                ${localStorage.getItem("username") != null ? `<button style="margin-left: auto;" class="reply"><i class="fas fa-reply"></i></button>
+                <div style="margin-left: auto;"></div>
+
+                ${localStorage.getItem("username") != null ?
+            `<button class="reply"><i class="fas fa-reply"></i></button>
                 <button class="upload"><i class="fas fa-file-image"></i></button>
                 <button class="edit"><i class="fas fa-edit"></i></button>
-                <button class="delete"><i class="fas fa-trash-alt"></i></button>`: '<div style="margin-left: auto;"></div>'}
+                <button class="delete"><i class="fas fa-trash-alt"></i></button>`: ''}
             </div>
-            ${post.media ? `<img style="height:400px; width:100%; background-color:white" class="image hidden" src="thumbnails/${post.media}">` : ""}
+            ${post.media ? `<img style="height:inherit; width:inherit; background-color:white" class="image hidden" src="thumbnails/${post.media}">` : ""}
             <div class="main ${post.post != undefined ? "" : "hidden"}"></div>
             <textarea class="${post.post != undefined ? "hidden" : ""}"></textarea>
         </div>
@@ -268,13 +271,13 @@ function addNewNote(post) {
 
 
     if (post.media) {
-        main.addEventListener("click", () => {
-            if (main.classList.contains("hidden")) return;
+        main.addEventListener("mouseup", () => {
+            if (main.classList.contains("hidden") || hasSelectedText()) return;
             img.classList.toggle("hidden");
             main.classList.toggle("hidden");
         });
 
-        img.addEventListener("click", () => {
+        img.addEventListener("mouseup", () => {
             img.classList.toggle("hidden");
             main.classList.toggle("hidden");
         });
@@ -351,14 +354,16 @@ function addNewNote(post) {
     document.body.appendChild(note);
 }
 
-function updateLS() {
-    const notesText = document.querySelectorAll("textarea");
-
-    const notes = [];
-
-    notesText.forEach((note) => {
-        notes.push(note.value);
-    });
-
-    localStorage.setItem("notes", JSON.stringify(notes));
+function hasSelectedText() {
+    if (window.getSelection)
+    {
+        return window.getSelection().isCollapsed == false;
+    }
+    if (document.getSelection) {
+        return document.getSelection().isCollapsed == false;
+    }
+    else if (document.selection) {
+        return !document.selection.createRange().text;
+    }
+    else return false;
 }
