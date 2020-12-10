@@ -195,8 +195,8 @@ function addNewNote(post) {
     note.classList.add("note");
 
     note.innerHTML = `
-        <div id="${post.postId}" style="display:flex; flex-direction:column;overflow:hidden;">
-            <div class="tools" style="white-space: nowrap; overflow:hidden;">
+        <div id="${post.postId}" style="height:inherit">
+            <div class="tools">
                 <a class="postId" href="javascript:;" style="text-decoration:none;color:white;margin-left:0.1em;">${post.postId}</a>
                 ${post.responseTo ? `<i class="fas fa-angle-double-right" aria-hidden="true"></i>
                 <a class="responseTo" href="javascript:;" style="text-decoration:none;color:white;">${post.responseTo}</a>` : ""}
@@ -213,7 +213,7 @@ function addNewNote(post) {
                 <button class="edit"><i class="fas fa-edit"></i></button>
                 <button class="delete"><i class="fas fa-trash-alt"></i></button>`: ''}
             </div>
-            ${post.media ? `<img style="height:max-content; width:inherit; background-color:white" class="image hidden" src="thumbnails/${post.media}">` : ""}
+            ${post.media ? `<img style="height:100%; width:100%;" class="image hidden" src="thumbnails/${post.media}">` : ""}
             <div class="main ${post.post != undefined ? "" : "hidden"}"></div>
             <textarea class="${post.post != undefined ? "hidden" : ""}"></textarea>
         </div>

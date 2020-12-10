@@ -32,7 +32,7 @@ body {
     
 }
 
-/* TOOLS */
+/* TOP BAR TOOLS */
 
 #toolcontainer
 {
@@ -103,8 +103,9 @@ body {
     box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
     height: 400px;
     width: 400px;
-    max-width: 80vw;
     margin: 0.4em;
+    overflow: hidden;
+    max-width: 90vw;
 }
 
 .note .tools {
@@ -113,6 +114,8 @@ body {
     justify-content: flex-end;
     padding-top: 0.3em;
     padding-bottom: 0.3em;
+    white-space: nowrap;
+    overflow:hidden;
 }
 
 .note .tools button {
@@ -125,15 +128,16 @@ body {
 }
 
 .note .main {
-    overflow: hidden;
     overflow-wrap: break-word;
-    height: inherit;
     width: inherit;
+    height: 100%;
 }
 
-.note .main > p {
-    height:inherit;
+.note .main > *
+{
+    max-height: 100%;
 }
+
 
 .note textarea {
     outline: none;
