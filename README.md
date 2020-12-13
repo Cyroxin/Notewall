@@ -2,7 +2,7 @@
 Site for posting messages 
 
 
-[![preview](Preview.png)]()
+[![preview](preview.png)]()
 
 
 ## Git Commands
