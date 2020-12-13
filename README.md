@@ -16,6 +16,7 @@ $ git clone https://github.com/cyroxin/notewall.git
 **Synchronizing changes**
 
 ```` Git
+$ cd notewall
 $ git pull
 $ git commit -a -m "Synchronizing"
 $ git push
